@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="rus">
+<head>
+    <meta charset="UTF-8">
+    <title>Data Base</title>
+    <script src="main.js"></script>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+<div>
+    <p> Добро пожаловать в меню базы данных!</p>
+    <p id="StatIn" onload="return StatIn()"></p>
+    <p>Выбирите пункт меню:</p>
+</div>
+<div>
+    <form>
+        <input type="button" name="add" value="Добавить запись/Сбросить формы" onclick="ShowAdd()">
+        <input type="button" name="show" value="Показать записи" onclick="ShowOut()">
+        <input type="button" name="delete" value="Удалить запись" onclick="ShowDelete()">
+        <input type="button" name="edit" value="Редактировать запись" onclick="ShowEdit()">
+        <input type="button" name="search" value="Поиск записи" onclick="Search()">
+        <input type="button" name="sort" value="Сортировать записи" onclick="Sort()">
+        <input type="button" name="filtration" value="Фильтрация записей" onclick="Filtration()">
+    </form>
+</div>
+<div id="Notification" class="popup">
+    <div class="pop-content">
+        <div class="pop-head">
+            Ошибка
+        </div>
+        <div class="pop-body">
+            Нет введенных данных
+        </div>
+        <div class="pop-footer">
+            <input type="button" class="btn" id="btn" value="Ок">
+        </div>
+    </div>
+</div>
+<div id="Add" style="display: none">
+    <form action="JavaScript:SubmitIn(1)">
+        <br> Введите номер в отеле:     <input type="number" min="1" max="500" value="0" id="num">
+        <br> Введите дату бронирования: <input type="date" id="date">
+        <br> Введите ФИО постояльца:    <input type="text" size="30" id="name" value="Введите Имя" onfocus="this.value=''">
+        <br> Выберите способ оплаты:
+        <select name="type pay" size="1" id="pay" value="Выберите способ оплаты">
+            <option value="default">Выберете способ оплаты</option>
+            <option value="Карта">Карта</option>
+            <option value="Наличные">Наличные</option>
+            <option value="GooglePay">GooglePay</option>
+            <option value="ApplePay">ApplePay</option>
+            <option value="SPay">SPay</option>
+        </select>
+        <br>Цена номера: <input type="number" min="1" max="1000" value="0" id="cost">
+        <br>Тип номера:
+        <select name="room type" size="1" id="room">
+            <option value="default">Выберите тип комнаты</option>
+            <option value="Эконом">Эконом</option>
+            <option value="Президент">Президент</option>
+            <option value="Люкс">Люкс</option>
+            <option value="De lux">De lux</option>
+            <option value="Двухуровневый номер">Двухуровневый номер</option>
+        </select>
+        <br> Количество комнат: <input type="number" min="1" max="3" value="0" id="number_room">
+        <br>Тип бронирования:
+        <select name="booking type" size="1" id="booking">
+            <option value="default">Выберите тип брони</option>
+            <option value="Предоплата">Предоплата</option>
+            <option value="Выставление счёта">Выставление счёта</option>
+            <option value="Под гарантию кредитных карт">Под гарантию кредитных карт</option>
+            <option value="За счёт компании">За счёт компании</option>
+            <option value="Ваучер">Ваучером</option>
+        </select>
+        <p>
+            <input type="submit" name="confirm" value="Подтвердить ввода" onsubmit="JavaScript:return SubmitIn(1)">
+            <input type="button" onclick="HideIn()" value="Скрыть ввод" >
+        </p>
+    </form>
+</div>
+
+
+<div id="output" style="display: none">
+    <p id="TableOutput"></p>
+    <form>
+        <input type="button" onclick="HideOut()" value="Скрыть таблицу">
+    </form>
+</div>
+
+
+<div id="delete" style="display: none">
+    <p>Выберите номер удаляемой записи: </p>
+    <p id="DeleteOutput"></p>
+    <form action="JavaScript: ConfirmDelete()">
+        <input type="submit" onsubmit="JavaScript: return ConfirmDelete()" value="Подтвердить удаление">
+        <input type="button" onclick="HideDelete()" value="Скрыть таблицу">
+    </form>
+</div>
+
+
+<div id="edit" style="display: none">
+    <p>Выберите запись для редактирования</p>
+    <p id="EditOutput"></p>
+    <form action="JavaScript: EditNextStep()">
+        <input type="submit" onsubmit="JavaScript: return EditNextStep()" value="Далее">
+        <input type="button" onclick="HideEdit()" value="Скрыть редактирование">
+    </form>
+</div>
+<div id="EditNextStep" style="display: none">
+    <p>Введите данные для редактирования:</p>
+    <p id="EditNextStepTable"></p>
+    <form action="JavaScript: SubmitIn(2)">
+        <input type="submit" onsubmit="JavaScript: return SubmitIn(2)" value="Далее">
+        <input type="button" onclick="HideEdit()" value="Скрыть редактирование">
+    </form>
+</div>
+
+<div id="search" style="display: none">
+    <p>Введите какое имя искать: </p>
+    <form action="JavaScript: Search()">
+        <input type="text" name="search" id="SearchName" onfocus="this.value = ''" value="Введите имя здесь">
+        <input type="submit" onsubmit="JavaScript: return Search()" value="Искать!">
+        <input type="button" onclick="HideSearch()" value="Скрыть поиск!">
+    </form>
+    <p id="SearchResult"></p>
+</div>
+
+
+<div id="sort" style="display: none">
+    <p>Выберите способ сортировки</p>
+    <form action="JavaScript:ConfirmSort()">
+        <select name="Sort" id="SortConfig">
+            <option value="default">Выберите метод сортировки</option>
+            <option value="Сортировать по возрастанию номеров">Сортировать по возрастанию номеров</option>
+            <option value="Сортировать по убыванию номеров">Сортировать по убыванию номеров</option>
+        </select>
+        <input type="submit" onsubmit="JavaScript: return ConfirmSort()" value="Подтвердить сортировку">
+        <input type="button" onclick="HideSort()" value="Скрыть сортировку">
+    </form>
+</div>
+
+<div id="filtration" style="display: none">
+    <p>Введите маску для фильтрации по имени:</p>
+    <form action="JavaScript: FiltrationProgress()">
+        <input type="text" name="filtration" id="FiltrationValue" onfocus="this.value = ''" value="Поле для ввода маски">
+        <input type="submit" onsubmit="JavaScript: return FiltrationProgress()" value="Фильровать">
+        <input type="button" onclick="HideFiltration()" value="Скрыть фильтрацию">
+    </form>
+    <p id="FiltrationOut" style="display: none"></p>
+</div>
+</body>
+</html>
